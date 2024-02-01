@@ -18,9 +18,7 @@ type Films struct {
 var Filmx Films
 
 func (f *Films) addfilm(tit,dir string) *Films {
-  f.Filems = append(f.Filems, []Film{
-    {Title: tit,Director: dir},
-  }...)
+  f.Filems = append(f.Filems, []Film{ {Title: tit,Director: dir} }...)
   return f
 }
 
@@ -39,7 +37,9 @@ func main(){
 
     htmlStrx := fmt.Sprintf("<p class='px-3 py-2'>%s - %s</p>", title,director)
     tmepx,_ := template.New("res").Parse(htmlStrx)
-    tmepx.Execute(w,nil)
+    if err:= tmepx.Execute(w,nil); err != nil {
+      panic(err)
+    }
   } 
 
   http.HandleFunc("/",h1)
