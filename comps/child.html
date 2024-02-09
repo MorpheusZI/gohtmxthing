@@ -1,18 +1,29 @@
-{{define "B"}}
-{{range .Filems}}
-<div class="flex gap-3">
-  <p class="px-3 py-2">{{.Title}} - {{.Director}} | {{.FilmID}}</p>
-  <button hx-get='/del' hx-trigger='click' hx-swap='innerHTML' hx-vals='{"id": "{{.FilmID}}"}' hx-target="#lis"
-    class="px-3 py-2 bg-red-500 rounded ">Delete</button>
+{{define "B"}} {{range .TodoList}}
+<div class="flex w-full justify-between items-center py-2">
+  <p>{{.Title}} - {{.Todo}}</p>
+  <button
+    hx-get="/del"
+    hx-trigger="click"
+    hx-swap="innerHTML"
+    hx-vals='{"id": "{{.TodoID}}"}'
+    hx-target="#lis"
+    class="px-3 py-2 bg-red-500 rounded"
+  >
+    Delete
+  </button>
 </div>
-{{end}}
-{{end}}
-{{define "A"}}
-{{range .Filems}}
-<div class="flex gap-3">
-  <p class="px-3 py-2">{{.Title}} - {{.Director}} | {{.FilmID}}</p>
-  <button hx-get='/del' hx-trigger='click' hx-swap='innerHTML' hx-vals='{"id": "{{.FilmID}}"}' hx-target="#lis"
-    class="px-3 py-2 bg-red-500 rounded ">Delete</button>
+{{end}} {{end}} {{define "A"}} {{range .TodoList}}
+<div class="flex w-full justify-between items-center py-2">
+  <p>{{.Title}} - {{.Todo}}</p>
+  <button
+    hx-get="/del"
+    hx-trigger="click"
+    hx-swap="innerHTML"
+    hx-vals='{"id": "{{.TodoID}}"}'
+    hx-target="#lis"
+    class="px-3 py-2 bg-red-500 rounded"
+  >
+    Delete
+  </button>
 </div>
-{{end}}
-{{end}}
+{{end}} {{end}}

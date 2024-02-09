@@ -8,32 +8,32 @@ import (
 	"github.com/google/uuid"
 )
 
-type Film struct {
-	FilmID   uuid.UUID
-	Title    string
-	Director string
+type Todo struct {
+	TodoID uuid.UUID
+	Title  string
+	Todo   string
 }
 
-type Films struct {
-	Filems []Film
+type TodoList struct {
+	TodoList []Todo
 }
 
-var Filmx Films = Films{
-	Filems: []Film{
-		{FilmID: uuid.New(), Title: "13 Bom Di jakarta", Director: "Angga Dimas Sasongko"},
+var Filmx TodoList = TodoList{
+	TodoList: []Todo{
+		{TodoID: uuid.New(), Title: "Wash Da Dishes", Todo: "Wash Da fucking Dishes"},
 	},
 }
 
-func (f *Films) addfilm(tit, dir string) uuid.UUID {
-	newFilm := Film{FilmID: uuid.New(), Title: tit, Director: dir}
-	f.Filems = append(f.Filems, newFilm)
-	return newFilm.FilmID
+func (f *TodoList) addfilm(tit, dir string) uuid.UUID {
+	newFilm := Todo{TodoID: uuid.New(), Title: tit, Todo: dir}
+	f.TodoList = append(f.TodoList, newFilm)
+	return newFilm.TodoID
 }
 
-func (f *Films) DeleteFilm(FilmID uuid.UUID) {
-	for i, v := range f.Filems {
-		if v.FilmID == FilmID {
-			f.Filems = append(f.Filems[:i], f.Filems[i+1:]...)
+func (f *TodoList) DeleteFilm(FilmID uuid.UUID) {
+	for i, v := range f.TodoList {
+		if v.TodoID == FilmID {
+			f.TodoList = append(f.TodoList[:i], f.TodoList[i+1:]...)
 		}
 	}
 }
@@ -52,14 +52,16 @@ func main() {
 
 		Flz := Filmx.addfilm(title, director)
 		childe, _ := template.ParseFiles("comps/child.html")
-		res := Films{
-			Filems: []Film{
-				{Title: title, Director: director, FilmID: Flz},
+		res := TodoList{
+			TodoList: []Todo{
+				{Title: title, Todo: director, TodoID: Flz},
 			},
 		}
 
 		if err := childe.ExecuteTemplate(w, "A", res); err != nil {
 			log.Panic(err)
+		} else {
+			log.Printf("Todo item created. Values : \n{ Title: %v, Todo: %v, TodoID: %v }\n\n", title, director, Flz)
 		}
 	}
 
@@ -70,7 +72,9 @@ func main() {
 
 		t, _ := template.New("foo").ParseFiles("comps/child.html")
 		if err := t.ExecuteTemplate(w, "B", Filmx); err != nil {
-			panic(err)
+			log.Panic(err)
+		} else {
+			log.Printf("Todo item '%v' was Deleted. \n\n", aidi)
 		}
 	}
 

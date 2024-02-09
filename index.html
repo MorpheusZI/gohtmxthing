@@ -1,34 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <title>Go Server</title>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <script
+      src="https://unpkg.com/htmx.org@1.9.10"
+      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <div class="flex px-5 py-3 w-full gap-3">
       <div class="flex flex-col w-[60%]">
-        <h1 class= "text-3xl mb-3">Films</h1>
-        <div class="flex w-full flex-col py-2 pe-4 divide-y divide-white  text-xl rounded bg-blue-400 text-white" id="lis">
-          {{range .Filems}}
-          <div class="flex gap-3">
-            <p class="px-3 py-2" >{{.Title}} - {{.Director}} | {{.FilmID}}</p>
-            <button hx-get='/del' hx-trigger='click' hx-swap='innerHTML' hx-vals= '{"id": "{{.FilmID}}"}' hx-target="#lis" class="px-3 py-2 bg-red-500 rounded ">Delete</button>
+        <h1 class="text-3xl mb-3">Todo List</h1>
+        <div
+          class="flex w-full flex-col px-5 py-3 divide-y divide-white text-xl items-center rounded bg-blue-400 text-white"
+          id="lis"
+        >
+          {{range .TodoList}}
+          <div class="flex w-full justify-between items-center py-2">
+            <p>{{.Title}} - {{.Todo}}</p>
+            <button
+              hx-get="/del"
+              hx-trigger="click"
+              hx-swap="innerHTML"
+              hx-vals='{"id": "{{.TodoID}}"}'
+              hx-target="#lis"
+              class="px-3 py-2 bg-red-500 rounded"
+            >
+              Delete
+            </button>
           </div>
           {{end}}
         </div>
       </div>
       <div class="flex flex-col gap-3 px-4 w-[40%]">
-        <h1 class="text-3xl">Add a film</h1>
-        <form hx-post="/add-film" hx-target="#lis" hx-swap="beforeend" class="flex flex-col px-3 items-start gap-2 py-2 border-2 rounded-xl border-gray-300/50">
+        <h1 class="text-3xl">Add a Todo</h1>
+        <form
+          hx-post="/add-film"
+          hx-target="#lis"
+          hx-swap="beforeend"
+          class="flex flex-col px-3 items-start gap-2 py-2 border-2 rounded-xl border-gray-300/50"
+        >
           <label for="Title" class="text-xl">Title:</label>
-          <input type="text" name="title" class="w-full mb-4 py-2 px-3 fous:outline-none border-2 rounded-lg border-black" placeholder="Title">
-          <label for="Title" class="text-xl">Director:</label>
-          <input type="text" name="director" class="w-full mb-4 py-2 px-3 fous:outline-none border-2  rounded-lg border-black" placeholder="Director">
-          <button type="submit" class="text-white px-4 py-2 bg-cyan-500 rounded-xl text-xl">Submit</button>
+          <input
+            type="text"
+            name="title"
+            class="w-full mb-4 py-2 px-3 fous:outline-none border-2 rounded-lg border-black"
+            placeholder="Title"
+          />
+          <label for="Title" class="text-xl">Note:</label>
+          <input
+            type="text"
+            name="director"
+            class="w-full mb-4 py-2 px-3 fous:outline-none border-2 rounded-lg border-black"
+            placeholder="Note"
+          />
+          <button
+            type="submit"
+            class="text-white px-4 py-2 bg-cyan-500 rounded-xl text-xl"
+          >
+            Submit
+          </button>
         </form>
       </div>
     </div>
