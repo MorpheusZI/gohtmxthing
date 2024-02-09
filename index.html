@@ -12,9 +12,12 @@
     <div class="flex px-5 py-3 w-full gap-3">
       <div class="flex flex-col w-[60%]">
         <h1 class= "text-3xl mb-3">Films</h1>
-        <div class="flex w-full flex-col py-2 divide-y divide-white  text-xl rounded bg-blue-400 text-white" id="lis">
+        <div class="flex w-full flex-col py-2 pe-4 divide-y divide-white  text-xl rounded bg-blue-400 text-white" id="lis">
           {{range .Filems}}
-          <p class='py-2 px-3'>{{.Title}} - {{.Director}}</p>
+          <div class="flex gap-3">
+            <p class="px-3 py-2" >{{.Title}} - {{.Director}} | {{.FilmID}}</p>
+            <button hx-get='/del' hx-trigger='click' hx-swap='innerHTML' hx-vals= '{"id": "{{.FilmID}}"}' hx-target="#lis" class="px-3 py-2 bg-red-500 rounded ">Delete</button>
+          </div>
           {{end}}
         </div>
       </div>

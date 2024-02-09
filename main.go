@@ -1,49 +1,82 @@
 package main
 
 import (
-	"fmt"
+	"html/template"
 	"log"
 	"net/http"
-	"text/template"
+
+	"github.com/google/uuid"
 )
 
 type Film struct {
-  Title string
-  Director string
+	FilmID   uuid.UUID
+	Title    string
+	Director string
 }
+
 type Films struct {
-  Filems []Film
+	Filems []Film
 }
 
-var Filmx Films
-
-func (f *Films) addfilm(tit,dir string) *Films {
-  f.Filems = append(f.Filems, []Film{ {Title: tit,Director: dir} }...)
-  return f
+var Filmx Films = Films{
+	Filems: []Film{
+		{FilmID: uuid.New(), Title: "13 Bom Di jakarta", Director: "Angga Dimas Sasongko"},
+	},
 }
 
-func main(){
-  var h1 http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
-    tmpl := template.Must(template.ParseFiles("index.html")) 
-    if err:= tmpl.Execute(w,Filmx); err != nil {
-      panic(err)
-    }
-  }
+func (f *Films) addfilm(tit, dir string) uuid.UUID {
+	newFilm := Film{FilmID: uuid.New(), Title: tit, Director: dir}
+	f.Filems = append(f.Filems, newFilm)
+	return newFilm.FilmID
+}
 
-  var h2 http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
-    title := r.PostFormValue("title")
-    director := r.PostFormValue("director")
-    Filmx.addfilm(title,director)
+func (f *Films) DeleteFilm(FilmID uuid.UUID) {
+	for i, v := range f.Filems {
+		if v.FilmID == FilmID {
+			f.Filems = append(f.Filems[:i], f.Filems[i+1:]...)
+		}
+	}
+}
 
-    htmlStrx := fmt.Sprintf("<p class='px-3 py-2'>%s - %s</p>", title,director)
-    tmepx,_ := template.New("res").Parse(htmlStrx)
-    if err:= tmepx.Execute(w,nil); err != nil {
-      panic(err)
-    }
-  } 
+func main() {
+	var h1 http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("index.html"))
+		if err := tmpl.Execute(w, Filmx); err != nil {
+			panic(err)
+		}
+	}
 
-  http.HandleFunc("/",h1)
-  http.HandleFunc("/add-film",h2)
+	var h2 http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
+		title := r.PostFormValue("title")
+		director := r.PostFormValue("director")
 
-  log.Fatal(http.ListenAndServe(":8080",nil))
+		Flz := Filmx.addfilm(title, director)
+		childe, _ := template.ParseFiles("comps/child.html")
+		res := Films{
+			Filems: []Film{
+				{Title: title, Director: director, FilmID: Flz},
+			},
+		}
+
+		if err := childe.ExecuteTemplate(w, "A", res); err != nil {
+			log.Panic(err)
+		}
+	}
+
+	var h3 http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
+		aidi := r.URL.Query().Get("id")
+		idd, _ := uuid.Parse(aidi)
+		Filmx.DeleteFilm(idd)
+
+		t, _ := template.New("foo").ParseFiles("comps/child.html")
+		if err := t.ExecuteTemplate(w, "B", Filmx); err != nil {
+			panic(err)
+		}
+	}
+
+	http.HandleFunc("/", h1)
+	http.HandleFunc("/add-film", h2)
+	http.HandleFunc("/del", h3)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
