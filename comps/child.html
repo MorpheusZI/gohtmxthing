@@ -1,29 +1,47 @@
 {{define "B"}} {{range .TodoList}}
 <div class="flex w-full justify-between items-center py-2">
   <p>{{.Title}} - {{.Todo}}</p>
-  <button
-    hx-get="/del"
-    hx-trigger="click"
-    hx-swap="innerHTML"
-    hx-vals='{"id": "{{.TodoID}}"}'
-    hx-target="#lis"
-    class="px-3 py-2 bg-red-500 rounded"
-  >
-    Delete
-  </button>
+  <div class="flex gap-3 w-fit">
+    <button
+      id="EDB"
+      class="EDB px-3 py-2 text-black bg-white border-2 border-black rounded"
+      value="{{.TodoID}}"
+    >
+      Edit
+    </button>
+    <button
+      hx-get="/del"
+      hx-trigger="click"
+      hx-swap="innerHTML"
+      hx-vals='{"id": "{{.TodoID}}"}'
+      hx-target="#lis"
+      class="px-3 py-2 bg-red-500 rounded"
+    >
+      Delete
+    </button>
+  </div>
 </div>
 {{end}} {{end}} {{define "A"}} {{range .TodoList}}
 <div class="flex w-full justify-between items-center py-2">
   <p>{{.Title}} - {{.Todo}}</p>
-  <button
-    hx-get="/del"
-    hx-trigger="click"
-    hx-swap="innerHTML"
-    hx-vals='{"id": "{{.TodoID}}"}'
-    hx-target="#lis"
-    class="px-3 py-2 bg-red-500 rounded"
-  >
-    Delete
-  </button>
+  <div class="flex gap-3 w-fit">
+    <button
+      id="EDB"
+      class="px-3 py-2 text-black bg-white border-2 border-black rounded"
+      value="{{.TodoID}}"
+    >
+      Edit
+    </button>
+    <button
+      hx-get="/del"
+      hx-trigger="click"
+      hx-swap="innerHTML"
+      hx-vals='{"id": "{{.TodoID}}"}'
+      hx-target="#lis"
+      class="px-3 py-2 bg-red-500 rounded"
+    >
+      Delete
+    </button>
+  </div>
 </div>
 {{end}} {{end}}
