@@ -164,12 +164,22 @@
         });
       });
       document.addEventListener("htmx:afterSwap", function () {
+        const form = document.querySelector("form");
         const modal = document.querySelector("#EditM");
         const cmodal = document.querySelector("#can");
         const editTitle = document.querySelector("#Etit");
         const editform = document.getElementById("ef");
-
         const editButtons = document.querySelectorAll("#EDB");
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const titleInput = document.querySelector('input[name="title"]');
+          const directorInput = document.querySelector('input[name="todo"]');
+          titleInput.value = "";
+          directorInput.value = "";
+        });
+
         console.log(editButtons);
 
         editButtons.forEach((b) => {

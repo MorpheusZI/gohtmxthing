@@ -70,7 +70,7 @@ func main() {
 		if err := childe.ExecuteTemplate(w, "A", res); err != nil {
 			log.Panic(err)
 		} else {
-			log.Printf("Todo item created.Values : \n{ Title: %v, Todo: %v, TodoID: %v }\n\n", title, todo, Flz)
+			log.Printf("Todo item created.Values :\n{ Title: %v, Todo: %v, TodoID: %v }\n\n", title, todo, Flz)
 		}
 	}
 
@@ -79,11 +79,11 @@ func main() {
 		idd, _ := uuid.Parse(aidi)
 		Todoz.DeleteTodo(idd)
 
-		t, _ := template.New("grahh").ParseFiles("comps/child.html")
+		t, _ := template.New("Delete").ParseFiles("comps/child.html")
 		if err := t.ExecuteTemplate(w, "B", Todoz); err != nil {
 			log.Panic(err)
 		} else {
-			log.Printf("Todo item '%v' was Deleted. \n\n", aidi)
+			log.Printf("Todo item '%v' was Deleted.\n\n", aidi)
 		}
 	}
 
@@ -93,13 +93,42 @@ func main() {
 		tit := r.URL.Query().Get("title")
 		tod := r.URL.Query().Get("todo")
 
-		Todoz.EditTodo(idd, tit, tod)
+		if tit == "" && tod == "" {
+			for i, v := range Todoz.TodoList {
+				if v.TodoID == idd {
+					titl := Todoz.TodoList[i].Title
+					todx := Todoz.TodoList[i].Todo
+					Todoz.EditTodo(idd, titl, todx)
+				}
+			}
+		} else if tit == "" {
+			for i, v := range Todoz.TodoList {
+				if v.TodoID == idd {
+					titl := Todoz.TodoList[i].Title
+					Todoz.EditTodo(idd, titl, tod)
+				}
+			}
+		} else if tod == "" {
+			for i, v := range Todoz.TodoList {
+				if v.TodoID == idd {
+					todx := Todoz.TodoList[i].Todo
+					Todoz.EditTodo(idd, tit, todx)
+				}
+			}
+		} else {
+			Todoz.EditTodo(idd, tit, tod)
+		}
 
-		t, _ := template.New("grahh").ParseFiles("comps/child.html")
+		t, _ := template.New("Edit").ParseFiles("comps/child.html")
 		if err := t.ExecuteTemplate(w, "B", Todoz); err != nil {
 			log.Panic(err)
 		} else {
-			log.Printf("Todo item '%v' was Edited. \n\n", eid)
+			for i, v := range Todoz.TodoList {
+				if v.TodoID == idd {
+					EditedTodo := Todoz.TodoList[i]
+					log.Printf("Todo item '%v' was Edited.\nTo {Title: %v, Todo: %v}\n\n", idd, EditedTodo.Title, EditedTodo.Todo)
+				}
+			}
 		}
 	}
 
